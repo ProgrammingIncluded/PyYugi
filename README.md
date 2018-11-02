@@ -27,11 +27,13 @@ To create a deck, go to the deck folder and create a csv file. For example, "syn
 
 Now format the file like the following:
 
-> swift scarecrow: 3
-> tuningware: 1
-> EXT:
-> junk speeder: 2
-> stardust dragon: 1
+```
+swift scarecrow: 3
+tuningware: 1
+EXT:
+junk speeder: 2
+stardust dragon: 1
+```
 
 Everything after the "EXT:" keyword will be treated as cards in the extra deck. Numbers after the card name represents the card count for that specific card.
 
