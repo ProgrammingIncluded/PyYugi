@@ -6,8 +6,10 @@ DECK_DIR = "decks/"
 DEBUG = False
 EXT_KEYWORD = "EXT"
 
-# Loads from deck directory, with id set from maldoche deck.
-# Returns array of deck info
+# Loads from deck directory.
+# Must have called db.load_card_names() first.
+# Internally uses find_card().
+# Returns array of card to id dictionaries.
 def load_deck(deckname):
     if db.ALL_CARDS == None:
         print("Card Names not loaded")

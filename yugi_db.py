@@ -23,6 +23,7 @@ def check_dir():
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
 
+# Function to return the meta data of a card.
 def get_card_stat(id):
     global CARD_STATS
     global STATS_CACHE
@@ -87,13 +88,15 @@ def get_card_stat(id):
 
     return val
     
-
+# Function to unload all yugioh card names to id.
 def unload_card_names():
     ALL_CARDS = None
 
 # Load all the card names from file.
 # Note: Only function that checks data directory
 # this is okay because this function must be called.
+# Must call this before find_card() will work.
+# Loads entire unique ID to card name DB.
 def load_card_names():
     global ALL_CARDS
     if ALL_CARDS != None:
@@ -119,6 +122,8 @@ def load_card_names():
     # Remove the extra array
     ALL_CARDS = ALL_CARDS[0]
 
+# Can only work if load_card_names() is first called
+# Searches the DB of cardnames to id to find the card dictionary.
 def find_card(name):
     name = name.lower()
     for i in ALL_CARDS:
