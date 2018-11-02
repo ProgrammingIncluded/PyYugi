@@ -1,3 +1,7 @@
+# Do not include the card or db related files.
+*.json
+*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
