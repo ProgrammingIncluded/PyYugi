@@ -42,12 +42,36 @@ def can_activate_spell(player, spellind):
         return False
     return True
 
+# List of actions grouped by type
+# also grouped by card location
+MECH_LIST = {
+    "hand": {
+        "monster": {
+            "Normal Summon": can_summon_normal
+        },
+
+        "spell": {
+            "Set Spell": can_set_spell,
+            "Play Spell": can_play_spell,
+        },
+
+        "trap": {
+            "Set Trap": can_set_spell,
+            "Play Trap": can_play_spell,
+        }
+    }
+}
+
 
 # check if the player has won
 # Only check lifepoints and deck size.
-def player_win(player):
+def player_lose(player):
     if LP[player] <= 0:
         return True
     elif len(DECK[player]) == 0:
         return True
     return False
+
+# Check if there is a lose state.
+def lose_state():
+    return (player_lose(P1) or player_lose(P2))

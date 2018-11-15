@@ -8,6 +8,9 @@ import card_util as cu
 P1 = 0
 P2 = 1
 
+# Check the action stack
+AS = []
+
 # Current stage settings
 # Phase count starts at 0
 CUR_PHASE = 0
@@ -17,7 +20,6 @@ CUR_PHASE = 0
 PREV_NORM_SUMMON = -1
 
 # List of phase names for reference.
-
 
 # Check the number of rounds played
 # Always increases regardless of the player in play
@@ -35,6 +37,23 @@ def next_phase():
     CUR_PHASE += 1
     if CUR_PHASE >= 5:
         new_round()
+    # Clear the action stack
+    AS = []
+
+# Resolve the global stack.
+def resolve_stack():
+    global AS
+    resolve_stack_rec(AS)
+
+# Resolve_stack can be called recursively
+# Hence why we need a stack object
+# Called by resolve_stack
+def resolve_stack_rec(stack):
+    while len(stack) != 0:
+        f = stack.pop()
+        # Run function
+        f()
+    stack = []
 
 # Logic to start the next round.
 def new_round():
@@ -42,6 +61,7 @@ def new_round():
     global ROUND_CNT
     CUR_PHASE = 0
     ROUND_CNT += 1
+    AS = []
 
 ## DECK RELATED FUNCTIONS ##
 
@@ -61,29 +81,34 @@ def shuffle_deck(player):
 # Function to draw from a deck to hand. Returns cards that was drawn.
 # Returns none if deck is empty
 def draw(player):
-    maxc = len(WKDECK[player])
-    if maxc == 0:
-        return None
-    ind = rand.randint(0, maxc - 1)
-    chose = WKDECK[player].pop(ind)
-    HAND[player].append(chose)
-    return chose
+    def _draw():
+        maxc = len(WKDECK[player])
+        if maxc == 0:
+            return None
+        ind = rand.randint(0, maxc - 1)
+        chose = WKDECK[player].pop(ind)
+        HAND[player].append(chose)
+    AS.append(_draw)
 
 # Summon a card from deck to hand. Does not check validity rules.
 def summon(player, cardind, fpos, isnormal=False, cardfaceind=0):
-    FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
-    FIELD[player][fpos][0]["cardface"] = cardfaceind
-    if isnormal:
-        global PREV_NORM_SUMMON
-        PREV_NORM_SUMMON = ROUND_CNT
-    return FIELD[player][fpos]
+    def _summon():
+        FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
+        FIELD[player][fpos][0]["cardface"] = cardfaceind
+        if isnormal:
+            global PREV_NORM_SUMMON
+            PREV_NORM_SUMMON = ROUND_CNT
+        return FIELD[player][fpos]
+    AS.append(_summon)
 
 # SPELL RELATED FUNCTIONS
 # Set a spell card, sets a roundset
 # flag in order to keep track of setting.
 def set_spell(player, handind, spellind):
-    SPELL[player][spellind].insert(0, HAND[player].pop(handind))
-    SPELL[player][spellind]["cardface"] = 3
+    def _set_spell():
+        SPELL[player][spellind].insert(0, HAND[player].pop(handind))
+        SPELL[player][spellind]["cardface"] = 3
+    AS.append(_set_spell)
 
 # Play a spell from hand
 def play_spell(player, handind):
@@ -103,10 +128,6 @@ LP = [
 FIELD = [
     [[],[],[],[],[]],
     [[],[],[],[],[]]
-]
-
-MON = [
-    [], []
 ]
 
 # Trap contains non-pendulum. 
@@ -152,6 +173,17 @@ HAND = [
     [], []
 ]
 
+FIELD_POS = {
+    "hand": HAND,
+    "field": FIELD,
+    "pend": PEND,
+    "grave": GRAV,
+    "extm": EXTM,
+    "ban": BAN,
+    "spell": SPELL
+}
+
+FIELD_NAMES = list(FIELD_POS.keys())
 
 # Print all deck info
 def startdeckinfo(player):

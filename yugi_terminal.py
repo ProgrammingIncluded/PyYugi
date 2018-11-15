@@ -5,7 +5,7 @@ def main():
     
     print("Type e to exit.")
     while(True):
-        inp = raw_input("Card Name: ")
+        inp = input("Card Name: ")
         if inp == 'e':
             return 
         try:

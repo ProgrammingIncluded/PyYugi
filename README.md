@@ -1,5 +1,4 @@
 # PyYugi
-## Intro
 PyYugi is an attempt to capture the Yu Gi Oh game in Python in such a way that is easy and extendable. 
 The goal is to be able to design an automated system for auto play and optimization problems.
 
@@ -37,7 +36,7 @@ stardust dragon: 1
 
 Everything after the "EXT:" keyword will be treated as cards in the extra deck. Numbers after the card name represents the card count for that specific card.
 
-Cards can be specifically loaded by the ld_deck.py module and can becalled via:
+Cards can be specifically loaded by the ld_deck.py module and can be called via:
 
 > load_deck("synchron")
 

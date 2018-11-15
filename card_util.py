@@ -1,3 +1,5 @@
+import yugi_db as db
+from collections import defaultdict
 # Some common utils
 
 # Search stats in list using id
@@ -69,6 +71,18 @@ def condense_multi(array):
     for p in array:
         res += p
     return res
+
+# Helper function to group cards by type.
+# Returns dictionary of index by cards
+def group_card_type(cards):
+    res = defaultdict(list)
+    for i in range(0, len(cards)):
+        c = cards[i]
+        stats = db.get_card_stat(c["id"])
+        typ = gen_type(stats["type"])
+        res[typ].append(i)
+    return res
+    
 
 # Check if card is of a generic type. More coarse definition.
 def gen_type(typ):
