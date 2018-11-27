@@ -48,6 +48,7 @@ def resolve_stack():
 # Resolve_stack can be called recursively
 # Hence why we need a stack object
 # Called by resolve_stack
+# No support stacking midway.
 def resolve_stack_rec(stack):
     while len(stack) != 0:
         f = stack.pop()
@@ -63,61 +64,14 @@ def new_round():
     ROUND_CNT += 1
     AS = []
 
-## DECK RELATED FUNCTIONS ##
+# Card position definitions
+FACE_UP_ATK = 0
+FACE_UP_DEF = 1
+FACE_DOWN_DEF = 2
 
-# Set the deck for player
-def set_deck(player, deck):
-    DECK[player] = deck[0]
-    EXTD[player] = deck[1]
-    # Set our internal working deck by expansion
-    WKDECK[player] = cu.expand_cards(deck[0])
-    WKEXTD[player] = cu.expand_cards(deck[1])
-    return DECK[player], EXTD[player]
-
-# Shuffle the deck
-def shuffle_deck(player):
-    rand.shuffle(DECK[player])
-
-# Function to draw from a deck to hand. Returns cards that was drawn.
-# Returns none if deck is empty
-def draw(player):
-    def _draw():
-        maxc = len(WKDECK[player])
-        if maxc == 0:
-            return None
-        ind = rand.randint(0, maxc - 1)
-        chose = WKDECK[player].pop(ind)
-        HAND[player].append(chose)
-    AS.append(_draw)
-
-# Summon a card from deck to hand. Does not check validity rules.
-def summon(player, cardind, fpos, isnormal=False, cardfaceind=0):
-    def _summon():
-        FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
-        FIELD[player][fpos][0]["cardface"] = cardfaceind
-        if isnormal:
-            global PREV_NORM_SUMMON
-            PREV_NORM_SUMMON = ROUND_CNT
-        return FIELD[player][fpos]
-    AS.append(_summon)
-
-# SPELL RELATED FUNCTIONS
-# Set a spell card, sets a roundset
-# flag in order to keep track of setting.
-def set_spell(player, handind, spellind):
-    def _set_spell():
-        SPELL[player][spellind].insert(0, HAND[player].pop(handind))
-        SPELL[player][spellind]["cardface"] = 3
-    AS.append(_set_spell)
-
-# Play a spell from hand
-def play_spell(player, handind):
-    pass
-
-# Activate a spell from the field
-def activate_spell(player, spellind):
-    pass
-    
+# Same enumeration from before, mainly for syntactic sugar.
+FACE_UP_SPELL = 0
+FACE_DOWN_SPELL = 1
 
 # Life points
 LP = [

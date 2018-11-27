@@ -42,12 +42,58 @@ def can_activate_spell(player, spellind):
         return False
     return True
 
+# Position functions return a dict of arrays
+# Mainly for those cards that can play in more than one zone.
+# e.g. spell cards
+# Basic function to get available positions
+def avail_summon_pos(player):
+    avail = {"field": []}
+    for a in FIELD[player]:
+        if len(FIELD[player][a]) == 0:
+            avail["field"].append(a)
+    return avail
+
+# Returns first the spell card zone followed by pend
+def avail_spell_pos(player):
+    avail = {"spell": [], "pend": []}
+    for a in SPELL[player]:
+        if len(SPELL[player][a]) == 0:
+            avail["spell"].append(a)
+    for a in PEND[player]:
+        if len(PEND[player][a]) == 0:
+            avail["pend"].append(a)
+
+    return avail
+
+
+# Recall Types as listed in util:
+# fusion, link, synchro, xyz, monster, spell, trap, skill
+# Function to list positions to play
+POS_LIST = {
+    "hand": {
+        "monster": {
+            "Normal Summon": avail_summon_pos,
+        },
+
+        "spell": {
+            "Set Spell": avail_spell_pos,
+            "Play Spell": avail_spell_pos,
+        },
+
+        "trap": {
+            "Set Trap": avail_spell_pos,
+            "Play Trap": avail_spell_pos,
+        }
+    }
+}
+
 # List of actions grouped by type
+
 # also grouped by card location
 MECH_LIST = {
     "hand": {
         "monster": {
-            "Normal Summon": can_summon_normal
+            "Normal Summon": can_summon_normal,
         },
 
         "spell": {
@@ -61,7 +107,6 @@ MECH_LIST = {
         }
     }
 }
-
 
 # check if the player has won
 # Only check lifepoints and deck size.
