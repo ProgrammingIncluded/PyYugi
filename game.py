@@ -70,7 +70,7 @@ class Game:
         if act != None:
             # Play the action
             params = act[1]
-            params[0](params[1], params[2], pos, FACE_UP_ATK)
+            params[0](params[1], params[2], pos, face)
 
             if self.react == 0:
                 self.react = 1

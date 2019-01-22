@@ -60,6 +60,7 @@ def main():
         print_options(fro_opt)
         fro = request_input(0, len(fro_opt))
 
+        # Action if the user chooses to do nothing.
         if fro == 0:
             game.play_action(None)
             continue
@@ -81,6 +82,7 @@ def main():
         cardind = card_opt[cardind-1]
 
         # Play the action
+        print(actions[fro][typ][cardind])
         game.play_action(actions[fro][typ][cardind])
 
 

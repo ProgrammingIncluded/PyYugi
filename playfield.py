@@ -64,14 +64,16 @@ def new_round():
     ROUND_CNT += 1
     AS = []
 
+# All face up is > 0  and all face down is < 0
 # Card position definitions
-FACE_UP_ATK = 0
-FACE_UP_DEF = 1
-FACE_DOWN_DEF = 2
+FACE_UP_ATK = 1
+FACE_UP_DEF = 2
+FACE_DOWN_ATK = -1
+FACE_DOWN_DEF = -2
 
 # Same enumeration from before, mainly for syntactic sugar.
-FACE_UP_SPELL = 0
-FACE_DOWN_SPELL = 1
+FACE_UP_SPELL = 1
+FACE_DOWN_SPELL = -1
 
 # Life points
 LP = [
@@ -168,11 +170,19 @@ def handinfo(player):
     return result
 
 def fieldinfo(player):
+    other = 1 - player
     result = "\nEXT Monster Total(" + str(len(EXTM[player])) + "): \n" 
-    result += cu.cards_to_string(cu.compress_cards(EXTM[player]))
+    result += "\nPLAYER:"
+    result += cu.cards_to_string(EXTM[player])
+    result += "\nOPPONENT:"
+    result += cu.cards_to_string(EXTM[other], True)
     result += "\n"
     result += "\nField Total(" + str(cu.multi_array_count(FIELD[player])) + "): \n" 
-    result += cu.cards_to_string(cu.compress_cards(cu.condense_multi(FIELD[player])))
+    print(FIELD)
+    result += "\nPLAYER:"
+    result += cu.multi_cards_to_string(FIELD[player])
+    result += "\nOPPONENT:"
+    result += cu.multi_cards_to_string(FIELD[other], True)
     result += "\n"
     return result
 

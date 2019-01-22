@@ -40,6 +40,7 @@ def draw(player):
 # Summon a card from deck to hand. Does not check validity rules.
 def normal_summon(player, cardind, fpos, cardfaceind=FACE_UP_ATK):
     def _normal_summon():
+        global FIELD
         FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
         FIELD[player][fpos][0]["cardface"] = cardfaceind
         global PREV_NORM_SUMMON
@@ -50,6 +51,7 @@ def normal_summon(player, cardind, fpos, cardfaceind=FACE_UP_ATK):
 # Similar to normal summon but does not tick the normal summon ticker.
 def special_summon(player, cardind, fpos, cardfaceind = FACE_UP_ATK):
     def _special_summon():
+        global FIELD
         FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
         FIELD[player][fpos][0]["cardface"] = cardfaceind
         global PREV_NORM_SUMMON
@@ -70,6 +72,7 @@ def activate_spell(player, spellind, fpos, cardfaceind = FACE_UP_SPELL):
 # flag in order to keep track of setting.
 def set_spell(player, handind, fpos, cardfaceind = FACE_DOWN_SPELL):
     def _set_spell():
+        global SPELL
         SPELL[player][fpos].insert(0, HAND[player].pop(handind))
         SPELL[player][fpos]["cardface"] = cardfaceind
     AS.append(_set_spell)

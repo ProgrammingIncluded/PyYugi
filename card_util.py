@@ -1,4 +1,5 @@
 import yugi_db as db
+from playfield import *
 from collections import defaultdict
 # Some common utils
 
@@ -17,6 +18,7 @@ def expand_cards(cards):
             result.append({k: v for k, v in c.items() if k != "count"})
     return result
 
+# Count recurring cards and print the count instead.
 def compress_cards(cards):
     comp = {}
     for c in cards:
@@ -38,22 +40,59 @@ def count_compress_cards(cards):
     return count
 
 # Simple card print, dumps dictionary to string
-def cards_to_string(cards):
+def cards_to_string(cards, preserve_face=False):
     clen = len(cards)
     if clen == 0:
         return ""
     result = []
+
+    face = 0
+    name = cards[0]["name"]
+    if "cardface" in cards[0]:
+        face = cards[0]["cardface"]
+
+    face_str = cf_to_string(face)
+    if preserve_face and face < 0:
+        name = cf_to_string(face)
+    elif face_str != "":
+        name +=  " " + "(" + face_str + ")"
+
+
     if "count" not in cards[0]:
-        result = cards[0]["name"]
+        result = name
     else:
-        result = cards[0]["name"] + " (" + str(cards[0]["count"]) + ")"
+        result = name + " (" + str(cards[0]["count"]) + ")"
+        
     
     for i in range(1, clen): 
+        face = 0
+
+        if "cardface" in cards[i]:
+            face = cards[i]["cardface"]
+
+        name = cards[i]["name"]
+        face_str = cf_to_string(face)
+        if preserve_face and cards[i]["cardface"] < 0:
+            name = face_str
+        elif face_str != "":
+            name += " " + "(" + face_str + ")"
+            
+
         if "count" not in cards[i]:
-            result += "\n " + cards[i]["name"]
+            result += "\n " + name  
         else:
-            result += "\n" + cards[i]["name"] + " (" + str(cards[i]["count"]) + ")"
+            result += "\n" + name + " (" + str(cards[i]["count"]) + ")"
     return result
+
+# Print cards in a mult-array setting like fields array
+def multi_cards_to_string(cards, preserve_face=False):
+    res = ""
+    count = 0
+    for ar in cards:
+        res += "\nPos " + str(count) + "\n"
+        res += cards_to_string(ar, preserve_face)
+        count += 1
+    return res
 
 # Counts cards in multi array settings
 # like the field array
@@ -83,6 +122,17 @@ def group_card_type(cards):
         res[typ].append(i)
     return res
     
+# Get card position to string
+def cf_to_string(face):
+    if int(face) == FACE_DOWN_ATK:
+        return "Face Down"
+    elif int(face) == FACE_DOWN_DEF:
+        return "Face Down Defense"
+    elif int(face) == FACE_UP_ATK:
+        return "Face Up"
+    elif int(face) == FACE_UP_DEF:
+        return "Face Up Defense"
+    return ""
 
 # Check if card is of a generic type. More coarse definition.
 def gen_type(typ):
