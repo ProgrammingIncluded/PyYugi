@@ -27,8 +27,8 @@ def print_options(options):
 
 def main():
     db.load_card_names()
-    set_deck(P1, ldd.load_deck("maldoche"))
-    set_deck(P2, ldd.load_deck("maldoche"))
+    set_deck(P1, ldd.load_deck("maldoche_test"))
+    set_deck(P2, ldd.load_deck("maldoche_test"))
     shuffle_deck(P1)
     shuffle_deck(P2)
 
