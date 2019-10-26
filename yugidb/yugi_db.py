@@ -146,14 +146,16 @@ def load_card_names():
 def find_card(name):
     """Finds cards with name"""
     name = name.lower()
-    for i in ALL_CARDS:
-        if i["name"].lower() == name:
-            return i
+    for c in ALL_CARDS:
+        if c["name"].lower() == name:
+            return c
     return None
 
 
 def find_card_with_id(card_id):
     """Finds cards given id"""
     card_id = int(card_id)
-    for i in ALL_CARDS:
-        if card_id == ALL_CARDS:
+    for c in ALL_CARDS:
+        if card_id == c["id"]:
+            return c
+    return None

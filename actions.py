@@ -4,29 +4,29 @@ from playfield import *
 ## DECK RELATED FUNCTIONS ##
 
 # Set the deck for player
-def set_deck(player, deck):
-    DECK[player] = deck[0]
-    EXTD[player] = deck[1]
+def set_deck(pf, player, deck):
+    pf.DECK[player] = deck[0]
+    pf.EXTD[player] = deck[1]
     # Set our internal working deck by expansion
-    WKDECK[player] = cu.expand_cards(deck[0])
-    WKEXTD[player] = cu.expand_cards(deck[1])
-    return DECK[player], EXTD[player]
+    pf.WKDECK[player] = cu.expand_cards(deck[0])
+    pf.WKEXTD[player] = cu.expand_cards(deck[1])
+    return pf.DECK[player], pf.EXTD[player]
 
 # Shuffle the deck
-def shuffle_deck(player):
-    rand.shuffle(DECK[player])
+def shuffle_deck(pf, player):
+    rand.shuffle(pf.DECK[player])
 
 # Function to draw from a deck to hand. Returns cards that was drawn.
 # Returns none if deck is empty
-def draw(player):
+def draw(pf, player):
     def _draw():
-        maxc = len(WKDECK[player])
+        maxc = len(pf.WKDECK[player])
         if maxc == 0:
             return None
         ind = rand.randint(0, maxc - 1)
-        chose = WKDECK[player].pop(ind)
-        HAND[player].append(chose)
-    AS.append(_draw)
+        chose = pf.WKDECK[player].pop(ind)
+        pf.HAND[player].append(chose)
+    pf.AS.append(_draw)
 
 ## Action Related Card Functions ##
 # All these functions must only have 4 parameters
@@ -38,44 +38,39 @@ def draw(player):
 # in the future or for custom rules in card decks.
 
 # Summon a card from deck to hand. Does not check validity rules.
-def normal_summon(player, cardind, fpos, cardfaceind=FACE_UP_ATK):
+def normal_summon(pf, player, cardind, fpos, cardfaceind=FACE_UP_ATK):
     def _normal_summon():
-        global FIELD
-        FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
-        FIELD[player][fpos][0]["cardface"] = cardfaceind
-        global PREV_NORM_SUMMON
-        PREV_NORM_SUMMON = ROUND_CNT
-        return FIELD[player][fpos]
-    AS.append(_normal_summon)
+        pf.FIELD[player][fpos].insert(0, pf.HAND[player].pop(cardind))
+        pf.FIELD[player][fpos][0]["cardface"] = cardfaceind
+        pf.PREV_NORM_SUMMON = pf.ROUND_CNT
+        return pf.FIELD[player][fpos]
+    pf.AS.append(_normal_summon)
 
 # Similar to normal summon but does not tick the normal summon ticker.
-def special_summon(player, cardind, fpos, cardfaceind = FACE_UP_ATK):
+def special_summon(pf, player, cardind, fpos, cardfaceind = FACE_UP_ATK):
     def _special_summon():
-        global FIELD
-        FIELD[player][fpos].insert(0, HAND[player].pop(cardind))
-        FIELD[player][fpos][0]["cardface"] = cardfaceind
-        global PREV_NORM_SUMMON
-        PREV_NORM_SUMMON = ROUND_CNT
-        return FIELD[player][fpos]
-    AS.append(_special_summon)
+        pf.FIELD[player][fpos].insert(0, pf.HAND[player].pop(cardind))
+        pf.FIELD[player][fpos][0]["cardface"] = cardfaceind
+        pf.PREV_NORM_SUMMON = pf.ROUND_CNT
+        return pf.FIELD[player][fpos]
+    pf.AS.append(_special_summon)
 
  # Play a spell from hand
-def play_spell(player, handind, fpos, cardfaceind = FACE_UP_SPELL):
+def play_spell(pf, player, handind, fpos, cardfaceind = FACE_UP_SPELL):
     pass
 
 # Activate a spell from the field
-def activate_spell(player, spellind, fpos, cardfaceind = FACE_UP_SPELL):
+def activate_spell(pf, player, spellind, fpos, cardfaceind = FACE_UP_SPELL):
     pass
 
 # SPELL RELATED FUNCTIONS
 # Set a spell card, sets a roundset
 # flag in order to keep track of setting.
-def set_spell(player, handind, fpos, cardfaceind = FACE_DOWN_SPELL):
+def set_spell(pf, player, handind, fpos, cardfaceind = FACE_DOWN_SPELL):
     def _set_spell():
-        global SPELL
-        SPELL[player][fpos].insert(0, HAND[player].pop(handind))
-        SPELL[player][fpos]["cardface"] = cardfaceind
-    AS.append(_set_spell)
+        pf.SPELL[player][fpos].insert(0, pf.HAND[player].pop(handind))
+        pf.SPELL[player][fpos]["cardface"] = cardfaceind
+    pf.AS.append(_set_spell)
 
 ACTION_LIST = {
     "hand": {

@@ -27,23 +27,24 @@ def print_options(options):
 
 def main():
     db.load_card_names()
-    set_deck(P1, ldd.load_deck("maldoche_test"))
-    set_deck(P2, ldd.load_deck("maldoche_test"))
-    shuffle_deck(P1)
-    shuffle_deck(P2)
+    game = Game()
+    set_deck(game.pf, P1, ldd.load_deck("maldoche_test"))
+    set_deck(game.pf, P2, ldd.load_deck("maldoche_test"))
+    shuffle_deck(game.pf, P1)
+    shuffle_deck(game.pf, P2)
 
     print("\n")
     print("INTIALIZING GAME....")
-    game = Game()
     game.start()
     print("GAME HAND INFO FOR CURRENT PLAYER: ")
-    print(allinfo(game.cur_player))
+    print(allinfo(game.pf, game.cur_player))
 
     for actions in game:
+        # Check if current result is a response phase
         if game.is_reponse():
             print("\nRESPONSE P"+ str(game.cur_player + 1))
         else:
-            print("\nROUND ", ROUND_CNT + 1)
+            print("\nROUND ", game.pf.ROUND_CNT + 1)
         # Print currect cards
         print(fieldinfo(game.cur_player))
         print(handinfo(game.cur_player))

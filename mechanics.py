@@ -110,13 +110,13 @@ MECH_LIST = {
 
 # check if the player has won
 # Only check lifepoints and deck size.
-def player_lose(player):
-    if LP[player] <= 0:
+def player_lose(pf, player):
+    if pf.LP[player] <= 0:
         return True
-    elif len(DECK[player]) == 0:
+    elif len(pf.DECK[player]) == 0:
         return True
     return False
 
 # Check if there is a lose state.
-def lose_state():
-    return (player_lose(P1) or player_lose(P2))
+def lose_state(pf ):
+    return (player_lose(pf, P1) or player_lose(pf, P2))
