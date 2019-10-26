@@ -21,7 +21,6 @@ class CardLogic(metaclass=ABC):
     def summon(self):
         pass
 
-
     def get_logic(self, uid):
         """
         Tries to load the card logic class module and get the class
@@ -40,7 +39,8 @@ class CardLogic(metaclass=ABC):
         # Get the sub class value that we want
         for cls in CardLogic.__subclasses__:
             if cls.__name__ == subclass_name:
-                return cls.summon
+                # Create an instance of that class
+                return cls()
         
         return None
 
@@ -74,9 +74,6 @@ class Card:
         # Can be lazy evaluation or stored into one giant lookup for
         # better commpression.
         self.stats = db.get_card_stat(self.uid)
-        self.
 
-    def _load_logic(self):
-        """Loads the particular card logic from card_logic folder."""
-        # Use the id to load the database logic
-        
+        # Load logic that this card uses
+        self.logic = CardLogic.get_logic(self.uid)
