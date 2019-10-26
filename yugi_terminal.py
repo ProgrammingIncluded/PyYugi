@@ -1,4 +1,4 @@
-import yugi_db as db
+import yugidb.yugi_db as db
 
 def main():
     db.load_card_names()

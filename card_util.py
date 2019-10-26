@@ -1,4 +1,4 @@
-import yugi_db as db
+import yugidb.yugi_db as db
 from playfield import *
 from collections import defaultdict
 # Some common utils

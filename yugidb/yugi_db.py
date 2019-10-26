@@ -1,3 +1,15 @@
+"""
+File to manage querying to database to get file metadata.
+The file handles CACHES folder. Essential pulls the 4000+
+card names in order to all_cards.json and loads it into memory
+as a lookup table for names and id values. get_card_stat()
+can load more meta data about the card.
+
+Meta data is cached locally in 10 files for easier cache object loading
+and keeps the last read meta data file cache in memory. Ejects it if a card
+stat is not found.
+"""
+
 import requests
 import os
 import json
@@ -122,11 +134,26 @@ def load_card_names():
     # Remove the extra array
     ALL_CARDS = ALL_CARDS[0]
 
+#### QUERY FUNCTIONS ####
 # Can only work if load_card_names() is first called
 # Searches the DB of cardnames to id to find the card dictionary.
+# See py_terminal for returned values.
+#
+# Implementation is mainly a linear search because a game should
+# not have too many queries to do. Can be more efficient if data
+# type is sorted for binary search.
+
 def find_card(name):
+    """Finds cards with name"""
     name = name.lower()
     for i in ALL_CARDS:
         if i["name"].lower() == name:
             return i
     return None
+
+
+def find_card_with_id(card_id):
+    """Finds cards given id"""
+    card_id = int(card_id)
+    for i in ALL_CARDS:
+        if card_id == ALL_CARDS:

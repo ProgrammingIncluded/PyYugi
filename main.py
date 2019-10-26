@@ -1,5 +1,5 @@
 import ld_deck as ldd
-import yugi_db as db
+import yugidb.yugi_db as db
 from actions import *
 from game import Game
 
@@ -47,8 +47,8 @@ def main():
         # Print currect cards
         print(fieldinfo(game.cur_player))
         print(handinfo(game.cur_player))
-        
 
+        # Values for accessing the options array
         fro = -1
         typ = -1
         cardind = -1
@@ -64,7 +64,6 @@ def main():
         if fro == 0:
             game.play_action(None)
             continue
-            
 
         fro = fro_opt[fro - 1]
         # Get the specific type
