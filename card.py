@@ -28,7 +28,7 @@ class CardLogic(metaclass=ABC):
         TODO: Classes must be directly inherited. Need to add more to recurse check.
         """
 
-        subclass_name = "C_{}.py".format(str(uid))
+        subclass_name = "{}.py".format(str(uid))
         # Try to load the file into memory first and then return the value.
         loader = importlib.machinery.SourceFileLoader(
             CARD_LOGIC_FOLDER,

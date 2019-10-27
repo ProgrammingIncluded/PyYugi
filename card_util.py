@@ -119,6 +119,7 @@ def group_card_type(cards):
     for i in range(0, len(cards)):
         c = cards[i]
         stats = db.get_card_stat(c["id"])
+        print(stats)
         typ = gen_type(stats["type"])
         res[typ].append(i)
     return res

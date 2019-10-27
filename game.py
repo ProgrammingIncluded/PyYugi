@@ -61,7 +61,7 @@ class Game:
         if act != None:
             # Play the action
             params = act[1]
-            params[0](params[1], params[2], pos, face)
+            params[0](self.pf, params[1], params[2], pos, face)
 
             if self.react == 0:
                 self.react = 1
@@ -75,7 +75,7 @@ class Game:
         if self.react == 3 or self.react == 0:
             self.react = 0
             # Resolve our stack
-            resolve_stack()
+            resolve_stack(self.pf)
         else:
             self.toggle_player()
 
@@ -104,6 +104,17 @@ class Game:
         return actions
 
     #
+    # Exposed functions for ease of use for bot
+    #
+    def is_lose(self):
+        """Checks game is in lose state for current playing player."""
+        return lose_state(self.pf)
+
+    def game_over(self):
+        """Checks if game is over"""
+        return len(self.gen_actions) == 0
+
+    #
     # Private Functions
     #
 
@@ -111,15 +122,13 @@ class Game:
         """Helper function for gen_action to generate type list."""
         for rule, func in MECH_LIST[fro][typ].items():
             for ind in cardind:
-                if func(self.cur_player, ind):
+                if func(self.pf, self.cur_player, ind):
                     # Get available positions
                     pos = POS_LIST[fro][typ][rule]
                     # Create a callable system
                     # does not encode available positions
                     params = (ACTION_LIST[fro][typ][rule], self.cur_player, ind, pos)
-                    self.actions[fro][HAND[self.cur_player][ind]["name"]][rule] = (rule, params)
-
-
+                    self.actions[fro][self.pf.HAND[self.cur_player][ind]["name"]][rule] = (rule, params)
 
     # Iteration functions for ease of use.
     def __iter__(self):

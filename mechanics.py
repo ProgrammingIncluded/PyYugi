@@ -9,36 +9,36 @@ from playfield import *
 # Rule checking for summoning a normal monster
 # Includes cases for tributing summons
 # Does not check if handind is valid.
-def can_summon_normal(player, handind):
+def can_summon_normal(pf, player, handind):
     # Check if a normal summon had already occurred for this round.
-    if PREV_NORM_SUMMON == ROUND_CNT:
+    if pf.PREV_NORM_SUMMON == pf.ROUND_CNT:
         return False
 
     # Get the stats of the card
-    stats = db.get_card_stat(HAND[player][handind]["id"])
+    stats = db.get_card_stat(pf.HAND[player][handind]["id"])
 
     if cu.gen_type(stats["type"]) != "monster" or int(stats["level"]) > 4:
         return False
     return True
 
 # Check if can set spell or trap card
-def can_set_spell(player, handind):
-    spell_count = cu.multi_array_count(SPELL[player])
-    pend_count = cu.multi_array_count(PEND[player])
+def can_set_spell(pf, player, handind):
+    spell_count = cu.multi_array_count(pf.SPELL[player])
+    pend_count = cu.multi_array_count(pf.PEND[player])
     if spell_count >= 3 and pend_count >= 2:
         return False
     return True
 
 # Only quick play if quick play card type.
-def can_play_spell(player, handind):
-    stat = db.get_card_stat(HAND[player][handind]["id"])
+def can_play_spell(pf, player, handind):
+    stat = db.get_card_stat(pf.HAND[player][handind]["id"])
     if stat["race"] != "Quick-Play":
         return False
     return True
 
 # Check if we can activate the spell
-def can_activate_spell(player, spellind):
-    if SPELL[player][spellind][0]["roundset"] == ROUND_CNT:
+def can_activate_spell(pf, player, spellind):
+    if pf.SPELL[player][spellind][0]["roundset"] == pf.ROUND_CNT:
         return False
     return True
 
@@ -46,21 +46,21 @@ def can_activate_spell(player, spellind):
 # Mainly for those cards that can play in more than one zone.
 # e.g. spell cards
 # Basic function to get available positions
-def avail_summon_pos(player):
+def avail_summon_pos(pf, player):
     avail = {"field": []}
-    for a in FIELD[player]:
-        if len(FIELD[player][a]) == 0:
+    for a in pf.FIELD[player]:
+        if len(pf.FIELD[player][a]) == 0:
             avail["field"].append(a)
     return avail
 
 # Returns first the spell card zone followed by pend
-def avail_spell_pos(player):
+def avail_spell_pos(pf, player):
     avail = {"spell": [], "pend": []}
-    for a in SPELL[player]:
-        if len(SPELL[player][a]) == 0:
+    for a in pf.SPELL[player]:
+        if len(pf.SPELL[player][a]) == 0:
             avail["spell"].append(a)
-    for a in PEND[player]:
-        if len(PEND[player][a]) == 0:
+    for a in pf.PEND[player]:
+        if len(pf.PEND[player][a]) == 0:
             avail["pend"].append(a)
 
     return avail
@@ -118,5 +118,5 @@ def player_lose(pf, player):
     return False
 
 # Check if there is a lose state.
-def lose_state(pf ):
+def lose_state(pf):
     return (player_lose(pf, P1) or player_lose(pf, P2))

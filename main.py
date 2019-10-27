@@ -28,8 +28,9 @@ def print_options(options):
 def main():
     db.load_card_names()
     game = Game()
-    set_deck(game.pf, P1, ldd.load_deck("maldoche_test"))
-    set_deck(game.pf, P2, ldd.load_deck("maldoche_test"))
+    playfield = Playfield()
+    set_deck(game.pf, P1, ldd.load_deck("madolche_test"))
+    set_deck(game.pf, P2, ldd.load_deck("madolche_test"))
     shuffle_deck(game.pf, P1)
     shuffle_deck(game.pf, P2)
 
@@ -46,8 +47,8 @@ def main():
         else:
             print("\nROUND ", game.pf.ROUND_CNT + 1)
         # Print currect cards
-        print(fieldinfo(game.cur_player))
-        print(handinfo(game.cur_player))
+        print(fieldinfo(game.pf, game.cur_player))
+        print(handinfo(game.pf, game.cur_player))
 
         # Values for accessing the options array
         fro = -1
