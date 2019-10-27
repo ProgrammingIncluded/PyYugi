@@ -9,15 +9,12 @@ from game import Game
 ###   state.game_over() -> Boolean
 ###   state.is_lose() -> Boolean
 
-
 # rollout(state) -> state
 # rollout plays the game starting from state, taking random actions until
 # it reaches a terminal state
 def rollout(state):
     if state.game_over():
-        if state.is_lose():
-            return 0
-        return 1
+        return 0 if state.is_lose() else 1
 
     next_state = state.play_action(random_action(state))
     return rollout(next_state)
@@ -37,7 +34,7 @@ def MCTS_policy(state, num_nodes=1000):
     for n in num_nodes:
 
         #get leaf that is greedily the best descendant 
-        while not s.is_root:
+        while not s.is_leaf:
             s = s.best_child()[0]
 
         # already seen it once, need to get to its children
@@ -64,11 +61,13 @@ class MCTS:
     self.val = 0
     self.t = 0
     self.is_root = False
+    self.is_leaf = False
 
     def __init__(self, state, parent=None):
         self.parent = parent
-        self.is_root = not self.parent
         self.state = state
+        self.is_root = not self.parent
+        self.is_leaf = self.state.game_over()
     
     # update_ancestors: for each node in the ancestry line (starting at this node
     # and ending at the root), update its val to be their children's avg UCB
