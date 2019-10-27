@@ -4,7 +4,8 @@ import os
 import sys
 
 # Project root
-ROOT = sys.path.append(os.path.abspath(__file__))
+ROOT = os.path.abspath(__file__)
+sys.path.append(ROOT)
 
 # Card Logic Folder
 CARD_LOGIC_FOLDER = os.path.join(ROOT, "card_logic")

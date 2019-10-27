@@ -1,3 +1,4 @@
+import os_paths
 import yugidb.yugi_db as db
 
 def main():
