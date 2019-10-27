@@ -2,7 +2,7 @@
 
 import os
 import importlib.machinery
-import yugidb.yugi_db as db
+import yugidb as db
 
 from abc import ABC
 from os_paths import CARD_LOGIC_FOLDER

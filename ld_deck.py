@@ -1,5 +1,5 @@
 import csv
-import yugidb.yugi_db as db
+import yugidb as db
 # File to load deck data from text files.
 
 DECK_DIR = "decks/"

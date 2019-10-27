@@ -1,4 +1,4 @@
-import yugidb.yugi_db as db
+import yugidb as db
 import card_util as cu
 from playfield import *
 

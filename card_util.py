@@ -1,5 +1,5 @@
 import os_paths
-import yugidb.yugi_db as db
+import yugidb as db
 from playfield import *
 from collections import defaultdict
 # Some common utils

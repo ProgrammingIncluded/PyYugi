@@ -1,5 +1,5 @@
 import os_paths
-import yugidb.yugi_db as db
+import yugidb as db
 
 def main():
     db.load_card_names()

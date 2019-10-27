@@ -1,5 +1,5 @@
 import ld_deck as ldd
-import yugidb.yugi_db as db
+import yugidb as db
 from actions import *
 from game import Game
 
